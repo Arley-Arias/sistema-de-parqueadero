@@ -50,7 +50,7 @@ public class WebController {
         return "login";
     }
 
-    // --- VEHÍCULOS (USANDO SERVICE Y DTO) ---
+    // Vehiculos service y DTO
     @GetMapping("/panel/vehiculos")
     public String mostrarVehiculos(Model model) {
         model.addAttribute("vehiculos", vehiculoService.listarTodos());
@@ -77,7 +77,7 @@ public class WebController {
         return "vehiculos";
     }
 
-    // --- ESPACIOS ---
+    // Espacios
     @GetMapping("/panel/espacios")
     public String mostrarEspacios(Model model) {
         model.addAttribute("espacios", espacioRepository.findAll());
@@ -105,14 +105,13 @@ public class WebController {
         return "redirect:/panel/espacios";
     }
 
-    // --- MOVIMIENTOS ---
-    // --- MOVIMIENTOS ---
+    // Movimientos
     @GetMapping("/panel/movimientos")
     public String mostrarMovimientos(Model model) {
         model.addAttribute("movimientos", movimientoRepository.findAll());
         model.addAttribute("nuevoMovimiento", new Movimiento());
         
-        // Buscamos solo los espacios disponibles para mostrarlos en la lista
+        // Buscar solo los espacios disponibles para mostrarlos en la lista
         var espaciosDisponibles = espacioRepository.findAll().stream()
                 .filter(e -> e.getEstado().equals("DISPONIBLE"))
                 .toList();
@@ -123,7 +122,7 @@ public class WebController {
 
     @PostMapping("/panel/movimientos")
     public String guardarMovimiento(Movimiento movimiento) {
-        // Buscamos el espacio específico que el operador seleccionó
+        // Buscar el espacio específico que el operador seleccionó
         Espacio espacioSeleccionado = espacioRepository.findAll().stream()
                 .filter(e -> e.getNumero().equals(movimiento.getEspacioAsignado()))
                 .findFirst()
@@ -133,7 +132,7 @@ public class WebController {
             espacioSeleccionado.setEstado("OCUPADO");
             espacioRepository.save(espacioSeleccionado);
             
-            // Aseguramos que se guarde como activo
+            // Guardar como activo
             movimiento.setEstado("ACTIVO");
             movimientoRepository.save(movimiento);
         }
@@ -167,24 +166,15 @@ public class WebController {
         return "redirect:/panel/movimientos";
     }
 
-    // --- REPORTES ---
+    // Reportes
     @GetMapping("/panel/reportes")
     public String mostrarReportes(Model model) {
-        var activos = movimientoRepository.findAll().stream()
-                .filter(m -> m.getEstado().equals("ACTIVO"))
-                .toList();
-
-        double ingresos = movimientoRepository.findAll().stream()
-                .filter(m -> m.getEstado().equals("FINALIZADO") && m.getValorPagado() != null)
-                .mapToDouble(Movimiento::getValorPagado)
-                .sum();
-
-        model.addAttribute("activos", activos);
-        model.addAttribute("ingresosTotales", ingresos);
+        Double recaudoHoy = movimientoRepository.sumarRecaudoHoy();
+        model.addAttribute("recaudoHoy", recaudoHoy);
+    
         return "reportes";
-    }
-
-    // --- PROPIETARIOS ---
+     }
+    // Propietarios
     @GetMapping("/panel/propietarios")
     public String mostrarPropietarios(Model model) {
         model.addAttribute("propietarios", propietarioRepository.findAll());
@@ -211,7 +201,7 @@ public class WebController {
         return "propietarios";
     }
 
-    // --- CONFIGURACIÓN (SOLO ADMIN) ---
+    // Configuracion de admin
     @GetMapping("/panel/configuracion")
     public String mostrarConfiguracion(Model model) {
         Tarifa tarifa = tarifaRepository.findById(1L).orElse(new Tarifa());
@@ -224,5 +214,11 @@ public class WebController {
         tarifa.setId(1L); 
         tarifaRepository.save(tarifa);
         return "redirect:/panel/configuracion";
+    }
+
+    @GetMapping("/panel/espacios/eliminar/{id}")
+        public String eliminarEspacio(@PathVariable Long id) {
+        espacioRepository.deleteById(id); 
+        return "redirect:/panel/espacios";
     }
 }

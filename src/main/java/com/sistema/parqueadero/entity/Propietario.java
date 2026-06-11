@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Propietario {
 
     @Id
-    private String documento; // Usamos el documento como ID
+    private String documento;
 
     @Column(nullable = false)
     private String nombre;

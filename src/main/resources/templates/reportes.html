@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ParkAdmin - Reportes</title>
+    <title>Parqueadero - Reportes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/zephyr/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -68,8 +68,8 @@
                         <i class="fa-solid fa-sack-dollar fa-4x opacity-50"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-1 text-white-50">Ingresos Totales Registrados</h5>
-                        <h1 class="display-5 fw-bold mb-0" th:text="${'$' + ingresosTotales}">$0</h1>
+                        <h5 class="fw-bold mb-1 text-white-50">Recaudo del Día</h5>
+                        <h1 class="display-5 fw-bold mb-0">$<span th:text="${recaudoHoy != null ? #numbers.formatDecimal(recaudoHoy, 0, 'COMMA', 0, 'POINT') : '0'}"></span></h1>
                     </div>
                 </div>
             </div>

@@ -22,11 +22,11 @@ public class SecurityConfig {
         .anyRequest().authenticated()
         )
             .formLogin(login -> login
-                .loginPage("/login") // Aquí le decimos que use nuestra pantalla
+                .loginPage("/login") 
                 .defaultSuccessUrl("/panel/vehiculos", true)
                 .permitAll()
             )
-            .logout(logout -> logout.logoutSuccessUrl("/").permitAll()); // Al salir, vuelve al inicio
+            .logout(logout -> logout.logoutSuccessUrl("/").permitAll()); // Vuelve al inicio al salir
 
         return http.build();
     }

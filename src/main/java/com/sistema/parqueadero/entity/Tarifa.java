@@ -9,7 +9,7 @@ public class Tarifa {
     private Long id = 1L; 
     
     @Column(nullable = false)
-    private Double valorMinuto = 100.0; // Precio por defecto
+    private Double valorMinuto = 100.0;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

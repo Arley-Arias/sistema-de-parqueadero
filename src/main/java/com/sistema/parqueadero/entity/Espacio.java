@@ -11,10 +11,10 @@ public class Espacio {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String numero; // Ejemplo: A1, B2, C3
+    private String numero; // Numero de parqueadero
 
     @Column(nullable = false)
-    private String estado = "DISPONIBLE"; // DISPONIBLE u OCUPADO
+    private String estado = "DISPONIBLE"; // Disponible o ocupado
 
     // Getters y Setters
     public Long getId() { return id; }

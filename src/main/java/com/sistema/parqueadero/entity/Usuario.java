@@ -17,7 +17,7 @@ public class Usuario {
     private String password;
 
     @Column(nullable = false)
-    private String rol; // ADMIN u OPERADOR
+    private String rol; // Admin o operador
 
     // Getters y Setters
     public Long getId() { return id; }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ParkAdmin - Espacios</title>
+    <title>Parqueadero - Espacios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/zephyr/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -100,6 +100,9 @@
                             </a>
                             <a th:if="${e.estado == 'MANTENIMIENTO'}" th:href="@{/panel/espacios/mantenimiento/{id}(id=${e.id})}" class="btn btn-success btn-sm shadow-sm" title="Habilitar Espacio">
                                 <i class="fa-solid fa-check-double"></i> Habilitar
+                            </a>
+                            <a th:href="@{/panel/espacios/eliminar/{id}(id=${e.id})}" class="btn btn-danger btn-sm shadow-sm ms-1" onclick="return confirm('¿Seguro que quieres borrar este espacio?');" title="Eliminar Espacio">
+                                <i class="fa-solid fa-trash"></i> Eliminar
                             </a>
                         </td>
                     </tr>

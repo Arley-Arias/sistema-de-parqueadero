@@ -16,7 +16,7 @@ public class Vehiculo {
     private String nombrePropietario;
 
     @Column(nullable = false)
-    private String tipo; // "Carro" o "Moto"
+    private String tipo; // Carro o moto
     
     // Getters y Setters
     public String getTipo() { return tipo; }
