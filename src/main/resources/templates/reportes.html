@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ParkAdmin - Espacios</title>
+    <title>ParkAdmin - Reportes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/zephyr/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -27,7 +27,7 @@
                     <a class="nav-link" th:href="@{/panel/vehiculos}"><i class="fa-solid fa-car"></i> Carros/Motos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/panel/espacios}"><i class="fa-solid fa-border-all"></i> Puestos</a>
+                    <a class="nav-link" th:href="@{/panel/espacios}"><i class="fa-solid fa-border-all"></i> Puestos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/panel/movimientos}"><i class="fa-solid fa-right-left"></i> Entradas/Salidas</a>
@@ -37,7 +37,7 @@
                     <a class="nav-link" th:href="@{/panel/propietarios}"><i class="fa-solid fa-users"></i> Dueños</a>
                 </li>
                 <li class="nav-item" th:if="${esAdmin}">
-                    <a class="nav-link" th:href="@{/panel/reportes}"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
+                    <a class="nav-link active" th:href="@{/panel/reportes}"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
                 </li>
             </ul>
             
@@ -58,50 +58,43 @@
 </nav>
 
 <div class="container">
-    <h2 class="mb-4 text-primary fw-bold"><i class="fa-solid fa-border-all me-2"></i> Gestión de Espacios</h2>
+    <h2 class="mb-4 text-primary fw-bold"><i class="fa-solid fa-chart-pie me-2"></i> Reportes del Sistema</h2>
     
-    <div class="card shadow mb-5 border-top border-primary border-4" th:if="${esAdmin}">
-        <div class="card-body p-4">
-            <form th:action="@{/panel/espacios}" th:object="${nuevoEspacio}" method="post" class="row g-3 align-items-end">
-                <div class="col-md-10">
-                    <label class="form-label fw-bold text-secondary">Número o Código del Espacio</label>
-                    <input type="text" th:field="*{numero}" class="form-control" placeholder="Ej: A1" required>
+    <div class="row mt-4 mb-5">
+        <div class="col-md-5">
+            <div class="card text-white bg-success shadow rounded-4" style="background: linear-gradient(135deg, #20c997, #198754);">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="me-4">
+                        <i class="fa-solid fa-sack-dollar fa-4x opacity-50"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-1 text-white-50">Ingresos Totales Registrados</h5>
+                        <h1 class="display-5 fw-bold mb-0" th:text="${'$' + ingresosTotales}">$0</h1>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success w-100 fw-bold">
-                        <i class="fa-solid fa-plus"></i> Agregar
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
+    <h4 class="mb-3 text-secondary fw-bold"><i class="fa-solid fa-car-on me-2"></i> Vehículos Activos en Parqueadero</h4>
     <div class="card shadow">
         <div class="card-body p-0">
             <table class="table table-hover text-center mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th><i class="fa-solid fa-hashtag text-muted"></i> Número</th>
-                        <th><i class="fa-solid fa-circle-info text-muted"></i> Estado</th>
-                        <th th:if="${esAdmin}"><i class="fa-solid fa-gears text-muted"></i> Acciones</th>
+                        <th><i class="fa-solid fa-hashtag text-muted"></i> Placa</th>
+                        <th><i class="fa-solid fa-border-all text-muted"></i> Espacio Asignado</th>
+                        <th><i class="fa-regular fa-clock text-muted"></i> Hora de Entrada</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="e : ${espacios}">
-                        <td class="fw-bold fs-5" th:text="${e.numero}"></td>
-                        <td>
-                            <span th:if="${e.estado == 'DISPONIBLE'}" class="badge bg-success rounded-pill px-3 py-2"><i class="fa-solid fa-check"></i> Disponible</span>
-                            <span th:if="${e.estado == 'OCUPADO'}" class="badge bg-danger rounded-pill px-3 py-2"><i class="fa-solid fa-car"></i> Ocupado</span>
-                            <span th:if="${e.estado == 'MANTENIMIENTO'}" class="badge bg-warning rounded-pill px-3 py-2 text-dark"><i class="fa-solid fa-triangle-exclamation"></i> Mantenimiento</span>
-                        </td>
-                        <td th:if="${esAdmin}">
-                            <a th:if="${e.estado == 'DISPONIBLE'}" th:href="@{/panel/espacios/mantenimiento/{id}(id=${e.id})}" class="btn btn-warning btn-sm shadow-sm" title="Poner en Mantenimiento">
-                                <i class="fa-solid fa-wrench"></i> Mantenimiento
-                            </a>
-                            <a th:if="${e.estado == 'MANTENIMIENTO'}" th:href="@{/panel/espacios/mantenimiento/{id}(id=${e.id})}" class="btn btn-success btn-sm shadow-sm" title="Habilitar Espacio">
-                                <i class="fa-solid fa-check-double"></i> Habilitar
-                            </a>
-                        </td>
+                    <tr th:each="m : ${activos}">
+                        <td class="fw-bold" th:text="${m.placa}"></td>
+                        <td><span class="badge bg-dark rounded-pill px-3 py-2 fs-6" th:text="${m.espacioAsignado}"></span></td>
+                        <td class="text-success fw-bold" th:text="${#temporals.format(m.fechaEntrada, 'HH:mm')}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(activos)}">
+                        <td colspan="3" class="text-muted p-4">No hay vehículos en el parqueadero en este momento.</td>
                     </tr>
                 </tbody>
             </table>

@@ -16,15 +16,17 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/panel/vehiculos/eliminar/**").hasRole("ADMIN") // Solo el ADMIN puede borrar
-                .requestMatchers("/panel/**").hasAnyRole("ADMIN", "OPERADOR") // Ambos pueden ver el panel
-                .anyRequest().permitAll()
-            )
+        .requestMatchers("/", "/login", "/css/**").permitAll()
+        .requestMatchers("/panel/configuracion", "/panel/propietarios/**", "/panel/vehiculos/eliminar/**").hasRole("ADMIN")
+        .requestMatchers("/panel/**").hasAnyRole("ADMIN", "OPERADOR")
+        .anyRequest().authenticated()
+        )
             .formLogin(login -> login
-                .defaultSuccessUrl("/panel/vehiculos", true) // A dónde los manda al iniciar sesión
+                .loginPage("/login") // Aquí le decimos que use nuestra pantalla
+                .defaultSuccessUrl("/panel/vehiculos", true)
                 .permitAll()
             )
-            .logout(logout -> logout.permitAll());
+            .logout(logout -> logout.logoutSuccessUrl("/").permitAll()); // Al salir, vuelve al inicio
 
         return http.build();
     }

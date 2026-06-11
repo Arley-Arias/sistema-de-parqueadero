@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ParkAdmin - Sistema de Gestión</title>
+    <title>ParkAdmin - Propietarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/zephyr/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -24,7 +24,7 @@
         <div class="collapse navbar-collapse" id="menuPrincipal">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/panel/vehiculos}"><i class="fa-solid fa-car"></i> Carros/Motos</a>
+                    <a class="nav-link" th:href="@{/panel/vehiculos}"><i class="fa-solid fa-car"></i> Carros/Motos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/panel/espacios}"><i class="fa-solid fa-border-all"></i> Puestos</a>
@@ -34,7 +34,7 @@
                 </li>
 
                 <li class="nav-item" th:if="${esAdmin}">
-                    <a class="nav-link" th:href="@{/panel/propietarios}"><i class="fa-solid fa-users"></i> Dueños</a>
+                    <a class="nav-link active" th:href="@{/panel/propietarios}"><i class="fa-solid fa-users"></i> Dueños</a>
                 </li>
                 <li class="nav-item" th:if="${esAdmin}">
                     <a class="nav-link" th:href="@{/panel/reportes}"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
@@ -58,29 +58,22 @@
 </nav>
 
 <div class="container">
-    <h2 class="mb-4 text-primary fw-bold"><i class="fa-solid fa-car-side me-2"></i> Gestión de Vehículos</h2>
+    <h2 class="mb-4 text-primary fw-bold"><i class="fa-solid fa-users me-2"></i> Gestión de Propietarios</h2>
     
     <div class="card shadow mb-5 border-top border-primary border-4">
         <div class="card-body p-4">
-            <form th:action="@{/panel/vehiculos}" th:object="${nuevoVehiculo}" method="post" class="row g-3 align-items-end">
-                <div class="col-md-3">
-                    <label class="form-label fw-bold text-secondary">Placa</label>
-                    <input type="text" th:field="*{placa}" class="form-control" placeholder="Ej: ABC-123" required th:readonly="${nuevoVehiculo.placa != null}">
+            <form th:action="@{/panel/propietarios}" th:object="${nuevoPropietario}" method="post" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Documento</label>
+                    <input type="text" th:field="*{documento}" class="form-control" placeholder="Ej: 10102020" required th:readonly="${nuevoPropietario.documento != null}">
                 </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-bold text-secondary">Tipo</label>
-                    <select th:field="*{tipo}" class="form-select" required>
-                        <option value="Carro">Carro</option>
-                        <option value="Moto">Moto</option>
-                    </select>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Nombre Completo</label>
+                    <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombres y apellidos" required>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-bold text-secondary">Marca</label>
-                    <input type="text" th:field="*{marca}" class="form-control" placeholder="Ej: Chevrolet" required>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-bold text-secondary">Dueño</label>
-                    <input type="text" th:field="*{nombrePropietario}" class="form-control" placeholder="Nombre completo" required>
+                    <label class="form-label fw-bold text-secondary">Teléfono</label>
+                    <input type="text" th:field="*{telefono}" class="form-control" placeholder="Celular" required>
                 </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary w-100" title="Guardar">
@@ -96,27 +89,22 @@
             <table class="table table-hover text-center mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th><i class="fa-solid fa-hashtag text-muted"></i> Placa</th>
-                        <th><i class="fa-solid fa-motorcycle text-muted"></i> Tipo</th>
-                        <th><i class="fa-solid fa-tag text-muted"></i> Marca</th>
-                        <th><i class="fa-solid fa-user text-muted"></i> Dueño</th>
+                        <th><i class="fa-regular fa-id-card text-muted"></i> Documento</th>
+                        <th><i class="fa-solid fa-user text-muted"></i> Nombre</th>
+                        <th><i class="fa-solid fa-phone text-muted"></i> Teléfono</th>
                         <th><i class="fa-solid fa-gears text-muted"></i> Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="v : ${vehiculos}">
-                        <td class="fw-bold" th:text="${v.placa}"></td>
+                    <tr th:each="p : ${propietarios}">
+                        <td class="fw-bold" th:text="${p.documento}"></td>
+                        <td th:text="${p.nombre}"></td>
+                        <td th:text="${p.telefono}"></td>
                         <td>
-                            <span th:if="${v.tipo == 'Carro'}" class="badge bg-info rounded-pill px-3"><i class="fa-solid fa-car"></i> Carro</span>
-                            <span th:if="${v.tipo == 'Moto'}" class="badge bg-secondary rounded-pill px-3"><i class="fa-solid fa-motorcycle"></i> Moto</span>
-                        </td>
-                        <td th:text="${v.marca}"></td>
-                        <td th:text="${v.nombrePropietario}"></td>
-                        <td>
-                            <a th:href="@{/panel/vehiculos/editar/{placa}(placa=${v.placa})}" class="btn btn-warning btn-sm shadow-sm" title="Editar">
+                            <a th:href="@{/panel/propietarios/editar/{documento}(documento=${p.documento})}" class="btn btn-warning btn-sm shadow-sm" title="Editar">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
-                            <a th:if="${esAdmin}" th:href="@{/panel/vehiculos/eliminar/{placa}(placa=${v.placa})}" class="btn btn-danger btn-sm shadow-sm" title="Eliminar">
+                            <a th:href="@{/panel/propietarios/eliminar/{documento}(documento=${p.documento})}" class="btn btn-danger btn-sm shadow-sm" title="Eliminar">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
